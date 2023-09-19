@@ -1,43 +1,42 @@
-import tkinter as tk
-from tkinter import messagebox
+tasks = []
 
 def add_task():
-    task = entry.get()
-    if task:
-        listbox.insert(tk.END, task)
-        entry.delete(0, tk.END)
+    task = input("Enter a new task: ")
+    tasks.append({"task": task, "completed": False})
+    print("Task added successfully!")
+
+def list_tasks():
+    print("To-Do List:")
+    for index, task in enumerate(tasks, start=1):
+        status = "Done" if task["completed"] else "Not Done"
+        print(f"{index}. {task['task']} - [{status}]")
+
+
+def mark_task_complete():
+    list_tasks()
+    task_number = int(input("Enter the task number to mark as complete: ")) - 1
+    if 0 <= task_number < len(tasks):
+        tasks[task_number]["completed"] = True
+        print("Task marked as complete!")
     else:
-        messagebox.showwarning("Warning", "Please enter a task!")
+        print("Invalid task number!")
 
-def remove_task():
-    try:
-        selected_task = listbox.curselection()[0]
-        listbox.delete(selected_task)
-    except IndexError:
-        messagebox.showwarning("Warning", "Please select a task to remove!")
 
-def clear_tasks():
-    listbox.delete(0, tk.END)
+while True:
+    print("\nOptions:")
+    print("1. Add Task")
+    print("2. List Tasks")
+    print("3. Mark Task as Complete")
+    print("4. Quit")
+    choice = input("Enter your choice: ")
 
-root = tk.Tk()
-root.title("To-Do List")
-
-frame = tk.Frame(root)
-frame.pack(pady=10)
-
-entry = tk.Entry(frame, font=("Helvetica", 14))
-entry.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-add_button = tk.Button(frame, text="Add Task", font=("Helvetica", 12), command=add_task)
-add_button.pack(side=tk.LEFT)
-
-listbox = tk.Listbox(root, font=("Helvetica", 14), selectbackground="yellow")
-listbox.pack(fill=tk.BOTH, expand=True)
-
-remove_button = tk.Button(root, text="Remove Task", font=("Helvetica", 12), command=remove_task)
-remove_button.pack()
-
-clear_button = tk.Button(root, text="Clear All Tasks", font=("Helvetica", 12), command=clear_tasks)
-clear_button.pack()
-
-root.mainloop()
+    if choice == "1":
+        add_task()
+    elif choice == "2":
+        list_tasks()
+    elif choice == "3":
+        mark_task_complete()
+    elif choice == "4":
+        break
+    else:
+        print("Invalid choice. Please try again.")
